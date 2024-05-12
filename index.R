@@ -1,4 +1,4 @@
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: setup
 #| code-summary: Load packages
 #| include: false
@@ -14,7 +14,7 @@ for (pkg in pkgs) {
 invisible(Sys.setlocale("LC_TIME", "en_GB.UTF-8"))
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Local functions
 #| code-summary: Local functions
 
@@ -32,7 +32,7 @@ get_summary <- function(x) {
 }
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Data Import
 #| code-summary: Import data from excel file
 #|
@@ -42,7 +42,7 @@ raw_data <- read_excel("Exposure_data_AEP.xlsx", sheet = 2)
 site_data <- read_excel("Exposure_data_AEP.xlsx", sheet = 3)
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Fetch chemical information from API
 #| code-summary: Fetch chemical information from API
 
@@ -73,7 +73,7 @@ if (!file.exists("Exposure_data_AEP.csv")) {
 }
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Box plot MCPA by site
 #| code-summary: Box plot of MCPA by site
 #| out-width: "100%"
@@ -124,7 +124,7 @@ make_box(plot_data, "SITE_NAME", "Site") +
   ))
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Box plot MCPA over time
 #| code-summary: Box plot of MCPA by month and week day
 #| out-width: "100%"
@@ -156,7 +156,7 @@ patchwork::wrap_plots(by_month, by_wday, nrow = 2) +
   )
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Line plot MCPA by site
 #| code-summary: Line plot of MCPA by site
 #| out-width: "100%"
@@ -192,7 +192,11 @@ make_lines <- function(data, x_var, x_lab) {
     ) +
     labs(
       x = x_lab,
-      y = NULL
+      y = paste(
+        "Water concentration (ug/L) of",
+        plot_data[, first(STRESSOR_NAME)],
+        sep = "\n"
+      )
     )
 }
 
@@ -201,7 +205,7 @@ plot_data <- exposure_data[STRESSOR_ID == 21]
 make_lines(plot_data, "SITE_NAME", "Site")
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Line plot MCPA over time
 #| code-summary: Line plot of MCPA by month and week day
 #| out-width: "100%"
@@ -232,7 +236,7 @@ patchwork::wrap_plots(by_month, by_wday, nrow = 2) +
   )
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Spatio-Temporal variation of MCPA
 #| code-summary: Spatio-Temporal variation of MCPA
 #| out-width: "100%"
@@ -291,9 +295,9 @@ patchwork::wrap_plots(by_month, by_wday, nrow = 2) +
 
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Summary Table
-#| code-summary: Summary table
+#| code-summary: Water concentration (ug/L) summary of stressor
 #|
 summary_table <- exposure_data %>% 
   group_by(SITE_NAME, STRESSOR_NAME) %>% 
@@ -321,7 +325,7 @@ summary_table %>%
   gt::tab_stubhead("Stressor Name")
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Fish concentration from Water concentration
 #| code-summary: Calculate fish concentration level
 #|
@@ -333,7 +337,7 @@ exposure_data <- exposure_data %>%
   mutate(FishConcentration = get_tissue_conc(MEASURED_VALUE, XLogP))
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Average Fish and water concentration
 #| code-summary: Average Fish and water concentration
 #|
@@ -350,7 +354,16 @@ summary_comparison <- exposure_data %>%
       }
     )
   ) %>% unnest(names_sep = "_") %>% 
-  arrange(desc(MEASURED_VALUE_Mean), desc(FishConcentration_Mean))
+  tidytable::rename_with(
+    ~gsub("MEASURED_VALUE", "Water concentration (ug/L)", .x)
+  ) %>% 
+  tidytable::rename_with(
+    ~gsub("FishConcentration", "Fish concentration (ug/Kg)", .x)
+  ) %>% 
+  arrange(
+    desc(`Water concentration (ug/L)_Mean`), 
+    desc(`Fish concentration (ug/Kg)_Mean`)
+  )
 
 gt::gt(
   data = summary_comparison, 
@@ -360,11 +373,11 @@ gt::gt(
   gt::fmt_number() %>% 
   gt::sub_missing() %>% 
   gt::cols_merge(
-    columns = gt::starts_with("MEASURED_VALUE") & !gt::ends_with("Mean"),
+    columns = gt::starts_with("Water") & !gt::ends_with("Mean"),
     pattern = "({1},{2})"
   ) %>% 
   gt::cols_merge(
-    columns = gt::starts_with("FishConcentration") & !gt::ends_with("Mean"),
+    columns = gt::starts_with("Fish") & !gt::ends_with("Mean"),
     pattern = "({1},{2})"
   ) %>% 
   gt::cols_merge(
@@ -379,6 +392,10 @@ gt::gt(
     fn = \(x) gsub("Mean", "Mean (95% CI)", x)
   ) %>% 
   gt::opt_vertical_padding(0.25) %>%
+  gt::tab_style(
+    style = gt::cell_text(align = "center"),
+    locations = gt::cells_column_labels()
+  ) %>% 
   gt::tab_options(
     table.width = "100%",
     table.font.size = "10pt",
@@ -396,7 +413,7 @@ gt::gt(
   )
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Comparison plot water and fish concentration
 #| code-summary: Comparison plot water and fish concentration
 #| out-width: "100%"
@@ -440,14 +457,14 @@ make_two_fitted_plot <- function(data, time_var) {
       panel.grid = element_line(color = "#f0f0f0")
     ) +
     labs(
-      x = "log(Water concentration)",
-      y = "log(Fish concentration)"
+      x = "log(Water concentration (ug/L))",
+      y = "log(Fish concentration (ug/Kg))"
     )
 }
 
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Comparison plot water and fish concentration by month
 #| code-summary: Comparison plot water and fish concentration by month
 #| out-width: "100%"
@@ -458,7 +475,7 @@ make_two_fitted_plot <- function(data, time_var) {
 make_two_fitted_plot(plot_data, "Month")
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Comparison plot water and fish concentration by weekday
 #| code-summary: Comparison plot water and fish concentration by weekday
 #| out-width: "100%"
@@ -469,7 +486,7 @@ make_two_fitted_plot(plot_data, "Month")
 make_two_fitted_plot(plot_data, "Wday")
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 #| label: Water and fish concentration in map
 #| code-summary: Water and fish concentration in map
 #| out-width: "100%"
@@ -510,8 +527,8 @@ csmaps::nor_municip_map_b2020_split_dt %>%
     palette = "Set1", 
     direction = -1,
     labels = c(
-      FishConc = "Fish concentration",
-      WaterConc = "Water concentration"
+      FishConc = "Fish concentration (ug/Kg)",
+      WaterConc = "Water concentration (ug/L)"
     )
   ) +
   theme_void() +
