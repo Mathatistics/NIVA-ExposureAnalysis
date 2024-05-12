@@ -44,7 +44,6 @@ get_summary <- function(x) {
 }
 ```
 
-
 ## Explore the dataset
 
 ```{r}
@@ -88,8 +87,7 @@ if (!file.exists("Exposure_data_AEP.csv")) {
 }
 ```
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## Boxplot
 
 ### Spatial variation of MCPA
@@ -144,7 +142,6 @@ make_box(plot_data, "SITE_NAME", "Site") +
     sep = "\n"
   ))
 ```
-
 
 ### Temporal variation of MCPA
 
@@ -233,7 +230,6 @@ plot_data <- exposure_data[STRESSOR_ID == 21]
 make_lines(plot_data, "SITE_NAME", "Site")
 ```
 
-
 ### Temporal variation of MCPA
 
 ```{r}
@@ -266,7 +262,6 @@ patchwork::wrap_plots(by_month, by_wday, nrow = 2) +
     plot.margin = margin(l = 48)
   )
 ```
-
 :::
 
 ## Spatio-Temporal variation of MCPA
@@ -364,8 +359,7 @@ summary_table %>%
 
 ## Tissue concentration prediction
 
-Here we will predict the tissue concentration of the chemical in fish (Cf) on
-the basis of the mean water concentration (Cw),
+Here we will predict the tissue concentration of the chemical in fish (Cf) on the basis of the mean water concentration (Cw),
 
 ```{r}
 #| label: Fish concentration from Water concentration
@@ -378,7 +372,6 @@ get_tissue_conc <- function(cw, logp) {
 exposure_data <- exposure_data %>% 
   mutate(FishConcentration = get_tissue_conc(MEASURED_VALUE, XLogP))
 ```
-
 
 ```{r}
 #| label: Average Fish and water concentration
@@ -509,8 +502,7 @@ make_two_fitted_plot <- function(data, time_var) {
 
 ```
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ### By month
 
 ```{r}
@@ -536,7 +528,6 @@ make_two_fitted_plot(plot_data, "Month")
 #| 
 make_two_fitted_plot(plot_data, "Wday")
 ```
-
 :::
 
 ## Presentation of the results in map of Norway
