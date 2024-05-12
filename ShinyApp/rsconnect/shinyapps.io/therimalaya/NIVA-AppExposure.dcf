@@ -1,0 +1,12 @@
+name: NIVA-AppExposure
+title: NIVA-AppExposure
+username: therimalaya
+account: therimalaya
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11985765
+bundleId: 8606020
+url: https://therimalaya.shinyapps.io/NIVA-AppExposure/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
