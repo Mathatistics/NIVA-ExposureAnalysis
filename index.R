@@ -1,0 +1,526 @@
+## --------------------------------------------------------------------------------------------------------------
+#| label: setup
+#| code-summary: Load packages
+#| include: false
+#|
+pkgs <- c(
+  "tidytable", "ggplot2", "webchem",
+  "readxl", "purr", "stringr", "webchem",
+  "csmaps", "ggmap", "csdata"
+)
+for (pkg in pkgs) {
+  require(pkg, character.only = TRUE, quietly = TRUE)
+}
+invisible(Sys.setlocale("LC_TIME", "en_GB.UTF-8"))
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Local functions
+#| code-summary: Local functions
+
+## -- Get summary of a numeric vector ------------------------------------
+get_summary <- function(x) {
+  list(tidytable(
+    N = length(x),
+    Mean = mean(x, na.rm = TRUE),
+    Max = max(x, na.rm = TRUE),
+    Min = min(x, na.rm = TRUE),
+    StdDev = sd(x, na.rm = TRUE),
+    P5 = quantile(x, 0.05, na.rm = TRUE),
+    P95 = quantile(x, 0.95, na.rm = TRUE)
+  ))
+}
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Data Import
+#| code-summary: Import data from excel file
+#|
+## -- Import different sheets from the data file -----------------------------
+codebook <- read_excel("Exposure_data_AEP.xlsx", sheet = 1)
+raw_data <- read_excel("Exposure_data_AEP.xlsx", sheet = 2)
+site_data <- read_excel("Exposure_data_AEP.xlsx", sheet = 3)
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Fetch chemical information from API
+#| code-summary: Fetch chemical information from API
+
+## -- Fetch extra chemical information of the stressor from API
+## -- The fetched information is merged with exposure data and saved as csv
+## -- We also merge the site (location) information
+## -- This block of code only runs if the csv file is missing
+if (!file.exists("Exposure_data_AEP.csv")) {
+  cid_data <- raw_data %>% 
+    select(INCHIKEY) %>% 
+    unique() %>% 
+    map_df(webchem::get_cid, from = "inchikey", match = "first")
+  
+  cprop_data <- webchem::pc_prop(cid_data[["cid"]])
+  
+  exposure_data <- cprop_data %>% 
+    mutate(cid = as.character(CID)) %>% 
+    select(cid, MolecularFormula, MolecularWeight, 
+           InChI, IUPACName, XLogP, ExactMass) %>% 
+    inner_join(cid_data, by = "cid") %>% 
+    rename(INCHIKEY = query) %>% 
+    right_join(raw_data, by = "INCHIKEY") %>% 
+    left_join(site_data, by = "SITE_CODE")
+  
+  fwrite(exposure_data, file = "Exposure_data_AEP.csv")
+} else {
+  exposure_data <- fread("Exposure_data_AEP.csv")
+}
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Box plot MCPA by site
+#| code-summary: Box plot of MCPA by site
+#| out-width: "100%"
+#| fig-width: 7
+#| warning: false
+
+make_box <- function(data, x_var, x_lab) {
+  plot_data %>% 
+  ggplot(aes(get(x_var), MEASURED_VALUE)) +
+  geom_boxplot(outliers = FALSE, width = 0.75) +
+  geom_point(
+    position = position_jitter(width = 0.25),
+    shape = 21, size = rel(1.5), stroke = 1,
+    color = "gray40", fill = "grey80"
+  ) +
+  stat_summary(
+    aes(color = "Mean (SE)"),
+    fun.data = mean_se, 
+    geom = "pointrange", 
+    fill = "whitesmoke",
+    shape = 22,
+    stroke = 1.5
+  ) +
+  scale_y_continuous(breaks = scales::breaks_extended(10)) +
+  scale_color_manual(
+    name = NULL,
+    values = "firebrick",
+    breaks = "Mean (SE)"
+  ) +
+  ggthemes::theme_few() +
+  theme(
+    legend.position = c(1, 1),
+    legend.justification = c(1.1, 1.1)
+  ) +
+  labs(
+    x = x_lab,
+    y = NULL
+  )
+}
+
+plot_data <- exposure_data[STRESSOR_ID == 21]
+
+make_box(plot_data, "SITE_NAME", "Site") +
+  labs(y = paste(
+    "Water concentration (ug/L) of",
+    plot_data[, first(STRESSOR_NAME)],
+    sep = "\n"
+  ))
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Box plot MCPA over time
+#| code-summary: Box plot of MCPA by month and week day
+#| out-width: "100%"
+#| fig-width: 8
+#| fig-asp: 0.8
+#| warning: false
+#|
+
+plot_data <- exposure_data %>% 
+  filter(STRESSOR_ID == 21) %>% 
+  mutate(
+    Month = lubridate::month(SAMPLE_DATE, label = TRUE, abbr = FALSE),
+    Wday = lubridate::wday(SAMPLE_DATE, label = TRUE, abbr = FALSE)
+  )
+
+by_month <- make_box(plot_data, "Month", "Month")
+by_wday <- make_box(plot_data, "Wday", "Week day")
+
+patchwork::wrap_plots(by_month, by_wday, nrow = 2) +
+  labs(tag = paste(
+      "Water concentration (ug/L) of",
+      plot_data[, first(STRESSOR_NAME)],
+      sep = "\n"
+    )) +
+  theme(
+    plot.tag = element_text(size = rel(1), angle = 90, vjust = -0.5),
+    plot.tag.position = c(0, 1),
+    plot.margin = margin(l = 48)
+  )
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Line plot MCPA by site
+#| code-summary: Line plot of MCPA by site
+#| out-width: "100%"
+#| fig-width: 7
+#| warning: false
+
+make_lines <- function(data, x_var, x_lab) {
+  ggplot(data, aes(get(x_var), MEASURED_VALUE)) +
+    stat_summary(
+      fun.data = "mean_se",
+      geom = "ribbon",
+      color = "firebrick",
+      fill = NA,
+      linetype = "dashed",
+      group = 1
+    ) +
+    stat_summary(
+      fun = "mean",
+      geom = "line",
+      group = 1
+    ) +
+    stat_summary(
+      fun = "mean",
+      geom = "point",
+      shape = 21, size = rel(1.5), stroke = 1,
+      color = "gray40", fill = "grey80"
+    ) +
+    scale_y_continuous(breaks = scales::breaks_extended(10)) +
+    ggthemes::theme_few() +
+    theme(
+      legend.position = c(1, 1),
+      legend.justification = c(1.1, 1.1)
+    ) +
+    labs(
+      x = x_lab,
+      y = NULL
+    )
+}
+
+plot_data <- exposure_data[STRESSOR_ID == 21]
+
+make_lines(plot_data, "SITE_NAME", "Site")
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Line plot MCPA over time
+#| code-summary: Line plot of MCPA by month and week day
+#| out-width: "100%"
+#| fig-width: 8
+#| fig-asp: 0.8
+#| warning: false
+
+plot_data <- exposure_data %>% 
+  filter(STRESSOR_ID == 21) %>% 
+  mutate(
+    Month = lubridate::month(SAMPLE_DATE, label = TRUE, abbr = FALSE),
+    Wday = lubridate::wday(SAMPLE_DATE, label = TRUE, abbr = FALSE)
+  )
+
+by_month <- make_lines(plot_data, "Month", "Month")
+by_wday <- make_lines(plot_data, "Wday", "Week day")
+
+patchwork::wrap_plots(by_month, by_wday, nrow = 2) +
+  labs(tag = paste(
+      "Water concentration (ug/L) of",
+      plot_data[, first(STRESSOR_NAME)],
+      sep = "\n"
+    )) +
+  theme(
+    plot.tag = element_text(size = rel(1), angle = 90, vjust = -0.5),
+    plot.tag.position = c(0, 1),
+    plot.margin = margin(l = 48)
+  )
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Spatio-Temporal variation of MCPA
+#| code-summary: Spatio-Temporal variation of MCPA
+#| out-width: "100%"
+#| fig-width: 9
+#| fig-asp: 0.6
+#| warning: false
+
+plot_data <- exposure_data %>% 
+  filter(STRESSOR_ID == 21) %>% 
+  mutate(Month = lubridate::month(SAMPLE_DATE, label = TRUE)) %>% 
+  mutate(Wday = lubridate::wday(SAMPLE_DATE, label = TRUE))
+
+make_fitted_plot <- function(data, x_var, x_lab) {
+  data %>% 
+    ggplot(aes(as.numeric(get(x_var)), MEASURED_VALUE)) +
+      geom_smooth(
+        method = "glm", 
+        color = "firebrick", 
+        formula = "y ~ x", 
+        method.args = list(family = gaussian(link = "log"))
+      ) +
+      geom_point() +
+      facet_wrap(
+        facets = vars(SITE_NAME), 
+        nrow = 1, 
+        scales = "free"
+      ) +
+      scale_x_continuous(
+        breaks = scales::breaks_width(1),
+        labels = \(x) data[, levels(get(x_var))][x]
+      ) +
+      ggthemes::theme_few() +
+      theme(
+        panel.grid = element_line(color = "#f0f0f0")
+      ) +
+      labs(
+        x = x_lab,
+        y = NULL
+      )
+}
+
+by_month <- make_fitted_plot(plot_data, "Month", "Sampled Month")
+by_wday <- make_fitted_plot(plot_data, "Wday", "Sampled day")
+
+patchwork::wrap_plots(by_month, by_wday, nrow = 2) +
+  labs(tag = paste(
+      "Water concentration (ug/L) of",
+      plot_data[, first(STRESSOR_NAME)],
+      sep = "\n"
+    )) +
+  theme(
+    plot.tag = element_text(size = rel(1), angle = 90, vjust = -0.5),
+    plot.tag.position = c(0, 1),
+    plot.margin = margin(l = 48)
+  )
+
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Summary Table
+#| code-summary: Summary table
+#|
+summary_table <- exposure_data %>% 
+  group_by(SITE_NAME, STRESSOR_NAME) %>% 
+  summarise(across("MEASURED_VALUE", get_summary)) %>% 
+  unnest(MEASURED_VALUE) %>% 
+  arrange(desc(Mean), )
+  
+summary_table %>% 
+  gt::gt(rowname_col = "STRESSOR_NAME", groupname_col = "SITE_NAME") %>% 
+  gt::fmt_number(columns = !gt::starts_with("N"), decimals = 3) %>% 
+  gt::data_color(
+    columns = -1,
+    direction = "column",
+    palette = "Blues",
+    alpha = 0.75
+  ) %>% 
+  gt::opt_vertical_padding(0.5) %>% 
+  gt::tab_options(
+    table.font.size = "10pt",
+    table.width = "100%",
+    row_group.font.weight = "bold",
+    column_labels.font.weight = "bold"
+  ) %>% 
+  gt::sub_missing() %>% 
+  gt::tab_stubhead("Stressor Name")
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Fish concentration from Water concentration
+#| code-summary: Calculate fish concentration level
+#|
+get_tissue_conc <- function(cw, logp) {
+  cf <- cw * 10 ^(0.76 * logp - 0.23)
+  return(cf)
+}
+exposure_data <- exposure_data %>% 
+  mutate(FishConcentration = get_tissue_conc(MEASURED_VALUE, XLogP))
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Average Fish and water concentration
+#| code-summary: Average Fish and water concentration
+#|
+summary_comparison <- exposure_data %>%
+  group_by(SITE_NAME, STRESSOR_NAME) %>% 
+  summarize(
+    across(
+      c(MEASURED_VALUE, FishConcentration),
+      function(x) {
+        Hmisc::smean.cl.normal(x) %>%
+          as.list() %>% 
+          bind_cols() %>% 
+          list()
+      }
+    )
+  ) %>% unnest(names_sep = "_") %>% 
+  arrange(desc(MEASURED_VALUE_Mean), desc(FishConcentration_Mean))
+
+gt::gt(
+  data = summary_comparison, 
+  rowname_col = "STRESSOR_NAME",
+  groupname_col = "SITE_NAME"
+) %>% gt::tab_spanner_delim("_", split = "last", limit = 1) %>% 
+  gt::fmt_number() %>% 
+  gt::sub_missing() %>% 
+  gt::cols_merge(
+    columns = gt::starts_with("MEASURED_VALUE") & !gt::ends_with("Mean"),
+    pattern = "({1},{2})"
+  ) %>% 
+  gt::cols_merge(
+    columns = gt::starts_with("FishConcentration") & !gt::ends_with("Mean"),
+    pattern = "({1},{2})"
+  ) %>% 
+  gt::cols_merge(
+    columns = 3:4,
+    pattern = "{1} {2}"
+  ) %>% 
+  gt::cols_merge(
+    columns = 6:7,
+    pattern = "{1} {2}"
+  ) %>% 
+  gt::cols_label_with(
+    fn = \(x) gsub("Mean", "Mean (95% CI)", x)
+  ) %>% 
+  gt::opt_vertical_padding(0.25) %>%
+  gt::tab_options(
+    table.width = "100%",
+    table.font.size = "10pt",
+    column_labels.font.weight = "bold",
+    row_group.font.weight = "bold"
+  ) %>% 
+  gt::data_color(
+    columns = -c(1:2), 
+    direction = "column",
+    fn = scales::col_numeric(
+      palette = "Blues",
+      domain = NULL,
+      alpha = 0.5
+    )
+  )
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Comparison plot water and fish concentration
+#| code-summary: Comparison plot water and fish concentration
+#| out-width: "100%"
+#| fig-width: 8
+#| fig-asp: 0.8
+#| warning: false
+
+plot_data <- exposure_data %>% 
+  mutate(Month = lubridate::month(SAMPLE_DATE, label = TRUE, abbr = FALSE)) %>% 
+  mutate(Wday = lubridate::wday(SAMPLE_DATE, label = TRUE, abbr = FALSE)) %>% 
+  mutate(FishConcentration = get_tissue_conc(MEASURED_VALUE, XLogP)) %>% 
+  select(
+    SITE_NAME, STRESSOR_NAME, 
+    WaterConc = MEASURED_VALUE,
+    FishConc = FishConcentration,
+    Month, Wday
+  )
+
+
+make_two_fitted_plot <- function(data, time_var) {
+  plot_data %>% 
+    ggplot(aes(WaterConc, FishConc)) +
+    facet_grid(
+      cols = vars(SITE_NAME), 
+      rows = vars(get(time_var)),
+      scales = "free_x"
+    ) +
+    geom_point(alpha = 0.5) +
+    geom_smooth(
+      method = "lm",
+      formula = "y ~ x",
+      linewidth = 0.5
+    ) +
+    scale_x_log10(
+      breaks = 10^c(seq(-2, 2, 1)),
+      labels = scales::label_log()
+    ) +
+    scale_y_log10(labels = scales::label_log(digits = 2)) +
+    ggthemes::theme_few() +
+    theme(
+      panel.grid = element_line(color = "#f0f0f0")
+    ) +
+    labs(
+      x = "log(Water concentration)",
+      y = "log(Fish concentration)"
+    )
+}
+
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Comparison plot water and fish concentration by month
+#| code-summary: Comparison plot water and fish concentration by month
+#| out-width: "100%"
+#| fig-width: 8
+#| fig-asp: 0.8
+#| warning: false
+#|
+make_two_fitted_plot(plot_data, "Month")
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Comparison plot water and fish concentration by weekday
+#| code-summary: Comparison plot water and fish concentration by weekday
+#| out-width: "100%"
+#| fig-width: 8
+#| fig-asp: 0.8
+#| warning: false
+#|
+make_two_fitted_plot(plot_data, "Wday")
+
+
+## --------------------------------------------------------------------------------------------------------------
+#| label: Water and fish concentration in map
+#| code-summary: Water and fish concentration in map
+#| out-width: "100%"
+#| fig-height: 7
+
+plot_data <- exposure_data %>% 
+  group_by(SITE_NAME, LATITUDE, LONGITUDE) %>% 
+  rename(WaterConc = MEASURED_VALUE, FishConc = FishConcentration) %>% 
+  summarize(across(c(WaterConc, FishConc), function(x) {
+    Hmisc::smean.cl.normal(x) %>% 
+      as.list() %>% 
+      bind_cols() %>% 
+      list()
+  })) %>% unnest(names_sep = "_") %>% 
+  pivot_longer(
+    id_cols = c(SITE_NAME, LATITUDE, LONGITUDE), 
+    cols = -c(SITE_NAME, LATITUDE, LONGITUDE)
+  ) %>% tidytable::separate("name", c("Medium", "Measure"), "_") %>% 
+  pivot_wider(names_from = "Measure", values_from = "value")
+
+csmaps::nor_municip_map_b2020_split_dt %>% 
+  ggplot(aes(long, lat, group = group)) +
+  geom_polygon(fill = NA, color = "darkgrey", linewidth = 0.1) +
+  geom_label(
+    data = plot_data, 
+    aes(x = LONGITUDE, y = LATITUDE, label = SITE_NAME),
+    group = 1,
+    size = rel(3),
+    hjust = -0.2,
+    label.r = unit(2.5, "pt")
+  ) +
+  geom_point(
+    data = plot_data, 
+    aes(x = LONGITUDE, y = LATITUDE, size = Mean, color = Medium),
+    group = 1
+  ) +
+  scale_color_brewer(
+    palette = "Set1", 
+    direction = -1,
+    labels = c(
+      FishConc = "Fish concentration",
+      WaterConc = "Water concentration"
+    )
+  ) +
+  theme_void() +
+  coord_map() +
+  labs(
+    title = "Monitoring sites of Spatio-temporal exposure data",
+    subtitle = "Concentration level of stressor in water and fish tissue",
+    caption = "Year: 2019, Country: Norway",
+    size = "Mean concentration",
+    color = "Medium"
+  )
+
