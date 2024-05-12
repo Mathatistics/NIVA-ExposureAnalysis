@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Raju Rimal">
-<meta name="dcterms.date" content="2024-05-11">
+<meta name="dcterms.date" content="2024-05-12">
 
 <title>Spatio-Temporal Exposure Analysis</title>
 <style>
@@ -127,7 +127,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 11, 2024</p>
+      <p class="date">May 12, 2024</p>
     </div>
   </div>
   
@@ -320,13 +320,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
 <span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> x_lab,</span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="cn">NULL</span></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> exposure_data[STRESSOR_ID <span class="sc">==</span> <span class="dv">21</span>]</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="fu">make_lines</span>(plot_data, <span class="st">"SITE_NAME"</span>, <span class="st">"Site"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="fu">paste</span>(</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Water concentration (ug/L) of"</span>,</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>        plot_data[, <span class="fu">first</span>(STRESSOR_NAME)],</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> exposure_data[STRESSOR_ID <span class="sc">==</span> <span class="dv">21</span>]</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="fu">make_lines</span>(plot_data, <span class="st">"SITE_NAME"</span>, <span class="st">"Site"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/Line%20plot%20MCPA%20by%20site-1.png" class="img-fluid" style="width:100.0%"></p>
@@ -432,7 +436,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="summary-of-spatio-temporal-exposure-data">Summary of spatio-temporal exposure data</h2>
 <div class="cell">
 <details>
-<summary>Summary table</summary>
+<summary>Water concentration (ug/L) summary of stressor</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> exposure_data <span class="sc">%&gt;%</span> </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(SITE_NAME, STRESSOR_NAME) <span class="sc">%&gt;%</span> </span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="st">"MEASURED_VALUE"</span>, get_summary)) <span class="sc">%&gt;%</span> </span>
@@ -460,23 +464,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </details>
 <div class="cell-output-display">
 
-<div id="esccaijeic" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#esccaijeic table {
+<div id="axmcuymzgf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#axmcuymzgf table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#esccaijeic thead, #esccaijeic tbody, #esccaijeic tfoot, #esccaijeic tr, #esccaijeic td, #esccaijeic th {
+#axmcuymzgf thead, #axmcuymzgf tbody, #axmcuymzgf tfoot, #axmcuymzgf tr, #axmcuymzgf td, #axmcuymzgf th {
   border-style: none;
 }
 
-#esccaijeic p {
+#axmcuymzgf p {
   margin: 0;
   padding: 0;
 }
 
-#esccaijeic .gt_table {
+#axmcuymzgf .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -502,12 +506,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-left-color: #D3D3D3;
 }
 
-#esccaijeic .gt_caption {
+#axmcuymzgf .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#esccaijeic .gt_title {
+#axmcuymzgf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -519,7 +523,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-width: 0;
 }
 
-#esccaijeic .gt_subtitle {
+#axmcuymzgf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -531,7 +535,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-width: 0;
 }
 
-#esccaijeic .gt_heading {
+#axmcuymzgf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -543,13 +547,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#esccaijeic .gt_bottom_border {
+#axmcuymzgf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#esccaijeic .gt_col_headings {
+#axmcuymzgf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -564,7 +568,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#esccaijeic .gt_col_heading {
+#axmcuymzgf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -584,7 +588,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#esccaijeic .gt_column_spanner_outer {
+#axmcuymzgf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -596,15 +600,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 4px;
 }
 
-#esccaijeic .gt_column_spanner_outer:first-child {
+#axmcuymzgf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#esccaijeic .gt_column_spanner_outer:last-child {
+#axmcuymzgf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#esccaijeic .gt_column_spanner {
+#axmcuymzgf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -616,11 +620,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   width: 100%;
 }
 
-#esccaijeic .gt_spanner_row {
+#axmcuymzgf .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#esccaijeic .gt_group_heading {
+#axmcuymzgf .gt_group_heading {
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
@@ -646,7 +650,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   text-align: left;
 }
 
-#esccaijeic .gt_empty_group_heading {
+#axmcuymzgf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -661,15 +665,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: middle;
 }
 
-#esccaijeic .gt_from_md > :first-child {
+#axmcuymzgf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#esccaijeic .gt_from_md > :last-child {
+#axmcuymzgf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#esccaijeic .gt_row {
+#axmcuymzgf .gt_row {
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
@@ -688,7 +692,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#esccaijeic .gt_stub {
+#axmcuymzgf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -701,7 +705,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#esccaijeic .gt_stub_row_group {
+#axmcuymzgf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -715,15 +719,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: top;
 }
 
-#esccaijeic .gt_row_group_first td {
+#axmcuymzgf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#esccaijeic .gt_row_group_first th {
+#axmcuymzgf .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#esccaijeic .gt_summary_row {
+#axmcuymzgf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -733,16 +737,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#esccaijeic .gt_first_summary_row {
+#axmcuymzgf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#esccaijeic .gt_first_summary_row.thick {
+#axmcuymzgf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#esccaijeic .gt_last_summary_row {
+#axmcuymzgf .gt_last_summary_row {
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
@@ -752,7 +756,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#esccaijeic .gt_grand_summary_row {
+#axmcuymzgf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -762,7 +766,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#esccaijeic .gt_first_grand_summary_row {
+#axmcuymzgf .gt_first_grand_summary_row {
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
@@ -772,7 +776,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-color: #D3D3D3;
 }
 
-#esccaijeic .gt_last_grand_summary_row_top {
+#axmcuymzgf .gt_last_grand_summary_row_top {
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
@@ -782,11 +786,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#esccaijeic .gt_striped {
+#axmcuymzgf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#esccaijeic .gt_table_body {
+#axmcuymzgf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -795,7 +799,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#esccaijeic .gt_footnotes {
+#axmcuymzgf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -809,7 +813,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#esccaijeic .gt_footnote {
+#axmcuymzgf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 2px;
@@ -818,7 +822,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#esccaijeic .gt_sourcenotes {
+#axmcuymzgf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -832,7 +836,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#esccaijeic .gt_sourcenote {
+#axmcuymzgf .gt_sourcenote {
   font-size: 90%;
   padding-top: 2px;
   padding-bottom: 2px;
@@ -840,63 +844,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#esccaijeic .gt_left {
+#axmcuymzgf .gt_left {
   text-align: left;
 }
 
-#esccaijeic .gt_center {
+#axmcuymzgf .gt_center {
   text-align: center;
 }
 
-#esccaijeic .gt_right {
+#axmcuymzgf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#esccaijeic .gt_font_normal {
+#axmcuymzgf .gt_font_normal {
   font-weight: normal;
 }
 
-#esccaijeic .gt_font_bold {
+#axmcuymzgf .gt_font_bold {
   font-weight: bold;
 }
 
-#esccaijeic .gt_font_italic {
+#axmcuymzgf .gt_font_italic {
   font-style: italic;
 }
 
-#esccaijeic .gt_super {
+#axmcuymzgf .gt_super {
   font-size: 65%;
 }
 
-#esccaijeic .gt_footnote_marks {
+#axmcuymzgf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#esccaijeic .gt_asterisk {
+#axmcuymzgf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#esccaijeic .gt_indent_1 {
+#axmcuymzgf .gt_indent_1 {
   text-indent: 5px;
 }
 
-#esccaijeic .gt_indent_2 {
+#axmcuymzgf .gt_indent_2 {
   text-indent: 10px;
 }
 
-#esccaijeic .gt_indent_3 {
+#axmcuymzgf .gt_indent_3 {
   text-indent: 15px;
 }
 
-#esccaijeic .gt_indent_4 {
+#axmcuymzgf .gt_indent_4 {
   text-indent: 20px;
 }
 
-#esccaijeic .gt_indent_5 {
+#axmcuymzgf .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1511,70 +1515,83 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>      }</span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> <span class="fu">unnest</span>(<span class="at">names_sep =</span> <span class="st">"_"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(MEASURED_VALUE_Mean), <span class="fu">desc</span>(FishConcentration_Mean))</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>gt<span class="sc">::</span><span class="fu">gt</span>(</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> summary_comparison, </span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">rowname_col =</span> <span class="st">"STRESSOR_NAME"</span>,</span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">groupname_col =</span> <span class="st">"SITE_NAME"</span></span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> gt<span class="sc">::</span><span class="fu">tab_spanner_delim</span>(<span class="st">"_"</span>, <span class="at">split =</span> <span class="st">"last"</span>, <span class="at">limit =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">fmt_number</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">sub_missing</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">cols_merge</span>(</span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> gt<span class="sc">::</span><span class="fu">starts_with</span>(<span class="st">"MEASURED_VALUE"</span>) <span class="sc">&amp;</span> <span class="sc">!</span>gt<span class="sc">::</span><span class="fu">ends_with</span>(<span class="st">"Mean"</span>),</span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">"({1},{2})"</span></span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">cols_merge</span>(</span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> gt<span class="sc">::</span><span class="fu">starts_with</span>(<span class="st">"FishConcentration"</span>) <span class="sc">&amp;</span> <span class="sc">!</span>gt<span class="sc">::</span><span class="fu">ends_with</span>(<span class="st">"Mean"</span>),</span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">"({1},{2})"</span></span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">cols_merge</span>(</span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>,</span>
-<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">"{1} {2}"</span></span>
-<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">cols_merge</span>(</span>
-<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">7</span>,</span>
-<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">"{1} {2}"</span></span>
-<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">cols_label_with</span>(</span>
-<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">fn =</span> \(x) <span class="fu">gsub</span>(<span class="st">"Mean"</span>, <span class="st">"Mean (95% CI)"</span>, x)</span>
-<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">opt_vertical_padding</span>(<span class="fl">0.25</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">tab_options</span>(</span>
-<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">table.width =</span> <span class="st">"100%"</span>,</span>
-<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">table.font.size =</span> <span class="st">"10pt"</span>,</span>
-<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">column_labels.font.weight =</span> <span class="st">"bold"</span>,</span>
-<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">row_group.font.weight =</span> <span class="st">"bold"</span></span>
-<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">data_color</span>(</span>
-<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>), </span>
-<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">direction =</span> <span class="st">"column"</span>,</span>
-<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">fn =</span> scales<span class="sc">::</span><span class="fu">col_numeric</span>(</span>
-<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>      <span class="at">palette =</span> <span class="st">"Blues"</span>,</span>
-<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>      <span class="at">domain =</span> <span class="cn">NULL</span>,</span>
-<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>      <span class="at">alpha =</span> <span class="fl">0.5</span></span>
-<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  tidytable<span class="sc">::</span><span class="fu">rename_with</span>(</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span><span class="fu">gsub</span>(<span class="st">"MEASURED_VALUE"</span>, <span class="st">"Water concentration (ug/L)"</span>, .x)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  tidytable<span class="sc">::</span><span class="fu">rename_with</span>(</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span><span class="fu">gsub</span>(<span class="st">"FishConcentration"</span>, <span class="st">"Fish concentration (ug/Kg)"</span>, .x)</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">desc</span>(<span class="st">`</span><span class="at">Water concentration (ug/L)_Mean</span><span class="st">`</span>), </span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">desc</span>(<span class="st">`</span><span class="at">Fish concentration (ug/Kg)_Mean</span><span class="st">`</span>)</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>gt<span class="sc">::</span><span class="fu">gt</span>(</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> summary_comparison, </span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">rowname_col =</span> <span class="st">"STRESSOR_NAME"</span>,</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">groupname_col =</span> <span class="st">"SITE_NAME"</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> gt<span class="sc">::</span><span class="fu">tab_spanner_delim</span>(<span class="st">"_"</span>, <span class="at">split =</span> <span class="st">"last"</span>, <span class="at">limit =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">fmt_number</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">sub_missing</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">cols_merge</span>(</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> gt<span class="sc">::</span><span class="fu">starts_with</span>(<span class="st">"Water"</span>) <span class="sc">&amp;</span> <span class="sc">!</span>gt<span class="sc">::</span><span class="fu">ends_with</span>(<span class="st">"Mean"</span>),</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">"({1},{2})"</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">cols_merge</span>(</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> gt<span class="sc">::</span><span class="fu">starts_with</span>(<span class="st">"Fish"</span>) <span class="sc">&amp;</span> <span class="sc">!</span>gt<span class="sc">::</span><span class="fu">ends_with</span>(<span class="st">"Mean"</span>),</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">"({1},{2})"</span></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">cols_merge</span>(</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>,</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">"{1} {2}"</span></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">cols_merge</span>(</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">7</span>,</span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">"{1} {2}"</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">cols_label_with</span>(</span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">fn =</span> \(x) <span class="fu">gsub</span>(<span class="st">"Mean"</span>, <span class="st">"Mean (95% CI)"</span>, x)</span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">opt_vertical_padding</span>(<span class="fl">0.25</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">tab_style</span>(</span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> gt<span class="sc">::</span><span class="fu">cell_text</span>(<span class="at">align =</span> <span class="st">"center"</span>),</span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> gt<span class="sc">::</span><span class="fu">cells_column_labels</span>()</span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">tab_options</span>(</span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">table.width =</span> <span class="st">"100%"</span>,</span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">table.font.size =</span> <span class="st">"10pt"</span>,</span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">column_labels.font.weight =</span> <span class="st">"bold"</span>,</span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">row_group.font.weight =</span> <span class="st">"bold"</span></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">data_color</span>(</span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>), </span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">direction =</span> <span class="st">"column"</span>,</span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">fn =</span> scales<span class="sc">::</span><span class="fu">col_numeric</span>(</span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a>      <span class="at">palette =</span> <span class="st">"Blues"</span>,</span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a>      <span class="at">domain =</span> <span class="cn">NULL</span>,</span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a>      <span class="at">alpha =</span> <span class="fl">0.5</span></span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 
-<div id="zxwartxoux" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zxwartxoux table {
+<div id="mufgfmfvey" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mufgfmfvey table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#zxwartxoux thead, #zxwartxoux tbody, #zxwartxoux tfoot, #zxwartxoux tr, #zxwartxoux td, #zxwartxoux th {
+#mufgfmfvey thead, #mufgfmfvey tbody, #mufgfmfvey tfoot, #mufgfmfvey tr, #mufgfmfvey td, #mufgfmfvey th {
   border-style: none;
 }
 
-#zxwartxoux p {
+#mufgfmfvey p {
   margin: 0;
   padding: 0;
 }
 
-#zxwartxoux .gt_table {
+#mufgfmfvey .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1600,12 +1617,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-left-color: #D3D3D3;
 }
 
-#zxwartxoux .gt_caption {
+#mufgfmfvey .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#zxwartxoux .gt_title {
+#mufgfmfvey .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1617,7 +1634,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-width: 0;
 }
 
-#zxwartxoux .gt_subtitle {
+#mufgfmfvey .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1629,7 +1646,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-width: 0;
 }
 
-#zxwartxoux .gt_heading {
+#mufgfmfvey .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1641,13 +1658,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#zxwartxoux .gt_bottom_border {
+#mufgfmfvey .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zxwartxoux .gt_col_headings {
+#mufgfmfvey .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1662,7 +1679,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#zxwartxoux .gt_col_heading {
+#mufgfmfvey .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1682,7 +1699,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#zxwartxoux .gt_column_spanner_outer {
+#mufgfmfvey .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1694,15 +1711,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 4px;
 }
 
-#zxwartxoux .gt_column_spanner_outer:first-child {
+#mufgfmfvey .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zxwartxoux .gt_column_spanner_outer:last-child {
+#mufgfmfvey .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zxwartxoux .gt_column_spanner {
+#mufgfmfvey .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1714,11 +1731,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   width: 100%;
 }
 
-#zxwartxoux .gt_spanner_row {
+#mufgfmfvey .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#zxwartxoux .gt_group_heading {
+#mufgfmfvey .gt_group_heading {
   padding-top: 2px;
   padding-bottom: 2px;
   padding-left: 5px;
@@ -1744,7 +1761,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   text-align: left;
 }
 
-#zxwartxoux .gt_empty_group_heading {
+#mufgfmfvey .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1759,15 +1776,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: middle;
 }
 
-#zxwartxoux .gt_from_md > :first-child {
+#mufgfmfvey .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zxwartxoux .gt_from_md > :last-child {
+#mufgfmfvey .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zxwartxoux .gt_row {
+#mufgfmfvey .gt_row {
   padding-top: 2px;
   padding-bottom: 2px;
   padding-left: 5px;
@@ -1786,7 +1803,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#zxwartxoux .gt_stub {
+#mufgfmfvey .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1799,7 +1816,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#zxwartxoux .gt_stub_row_group {
+#mufgfmfvey .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1813,15 +1830,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: top;
 }
 
-#zxwartxoux .gt_row_group_first td {
+#mufgfmfvey .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zxwartxoux .gt_row_group_first th {
+#mufgfmfvey .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#zxwartxoux .gt_summary_row {
+#mufgfmfvey .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1831,16 +1848,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#zxwartxoux .gt_first_summary_row {
+#mufgfmfvey .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zxwartxoux .gt_first_summary_row.thick {
+#mufgfmfvey .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zxwartxoux .gt_last_summary_row {
+#mufgfmfvey .gt_last_summary_row {
   padding-top: 2px;
   padding-bottom: 2px;
   padding-left: 5px;
@@ -1850,7 +1867,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#zxwartxoux .gt_grand_summary_row {
+#mufgfmfvey .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1860,7 +1877,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#zxwartxoux .gt_first_grand_summary_row {
+#mufgfmfvey .gt_first_grand_summary_row {
   padding-top: 2px;
   padding-bottom: 2px;
   padding-left: 5px;
@@ -1870,7 +1887,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-color: #D3D3D3;
 }
 
-#zxwartxoux .gt_last_grand_summary_row_top {
+#mufgfmfvey .gt_last_grand_summary_row_top {
   padding-top: 2px;
   padding-bottom: 2px;
   padding-left: 5px;
@@ -1880,11 +1897,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#zxwartxoux .gt_striped {
+#mufgfmfvey .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zxwartxoux .gt_table_body {
+#mufgfmfvey .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1893,7 +1910,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#zxwartxoux .gt_footnotes {
+#mufgfmfvey .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1907,7 +1924,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#zxwartxoux .gt_footnote {
+#mufgfmfvey .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 1px;
@@ -1916,7 +1933,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#zxwartxoux .gt_sourcenotes {
+#mufgfmfvey .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1930,7 +1947,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#zxwartxoux .gt_sourcenote {
+#mufgfmfvey .gt_sourcenote {
   font-size: 90%;
   padding-top: 1px;
   padding-bottom: 1px;
@@ -1938,63 +1955,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#zxwartxoux .gt_left {
+#mufgfmfvey .gt_left {
   text-align: left;
 }
 
-#zxwartxoux .gt_center {
+#mufgfmfvey .gt_center {
   text-align: center;
 }
 
-#zxwartxoux .gt_right {
+#mufgfmfvey .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zxwartxoux .gt_font_normal {
+#mufgfmfvey .gt_font_normal {
   font-weight: normal;
 }
 
-#zxwartxoux .gt_font_bold {
+#mufgfmfvey .gt_font_bold {
   font-weight: bold;
 }
 
-#zxwartxoux .gt_font_italic {
+#mufgfmfvey .gt_font_italic {
   font-style: italic;
 }
 
-#zxwartxoux .gt_super {
+#mufgfmfvey .gt_super {
   font-size: 65%;
 }
 
-#zxwartxoux .gt_footnote_marks {
+#mufgfmfvey .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#zxwartxoux .gt_asterisk {
+#mufgfmfvey .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zxwartxoux .gt_indent_1 {
+#mufgfmfvey .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zxwartxoux .gt_indent_2 {
+#mufgfmfvey .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zxwartxoux .gt_indent_3 {
+#mufgfmfvey .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zxwartxoux .gt_indent_4 {
+#mufgfmfvey .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zxwartxoux .gt_indent_5 {
+#mufgfmfvey .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -2002,16 +2019,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <thead>
     <tr class="gt_col_headings gt_spanner_row">
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" scope="col" id=""></th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" scope="col" id="MEASURED_VALUE">
-        <span class="gt_column_spanner">MEASURED_VALUE</span>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" scope="col" id="Water concentration (ug/L)">
+        <span class="gt_column_spanner">Water concentration (ug/L)</span>
       </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" scope="col" id="FishConcentration">
-        <span class="gt_column_spanner">FishConcentration</span>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" scope="col" id="Fish concentration (ug/Kg)">
+        <span class="gt_column_spanner">Fish concentration (ug/Kg)</span>
       </th>
     </tr>
     <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean (95% CI)">Mean (95% CI)</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean (95% CI)">Mean (95% CI)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center;" scope="col" id="Mean (95% CI)">Mean (95% CI)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center;" scope="col" id="Mean (95% CI)">Mean (95% CI)</th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
@@ -2019,221 +2036,221 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <th colspan="3" class="gt_group_heading" scope="colgroup" id="Heiabekken">Heiabekken</th>
     </tr>
     <tr class="gt_row_group_first"><th id="stub_1_1" scope="row" class="gt_row gt_left gt_stub">imidacloprid</th>
-<td headers="Heiabekken stub_1_1 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #08306B; color: #FFFFFF;">1.14 (0.26,2.02)</td>
-<td headers="Heiabekken stub_1_1 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.73 (0.63,4.83)</td></tr>
+<td headers="Heiabekken stub_1_1 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #08306B; color: #FFFFFF;">1.14 (0.26,2.02)</td>
+<td headers="Heiabekken stub_1_1 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.73 (0.63,4.83)</td></tr>
     <tr><th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub">propamocarb</th>
-<td headers="Heiabekken stub_1_2 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #7FB8DA; color: #000000;">0.52 (−0.24,1.29)</td>
-<td headers="Heiabekken stub_1_2 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.52 (−1.16,6.20)</td></tr>
+<td headers="Heiabekken stub_1_2 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #7FB8DA; color: #000000;">0.52 (−0.24,1.29)</td>
+<td headers="Heiabekken stub_1_2 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.52 (−1.16,6.20)</td></tr>
     <tr><th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub">2-methyl-4-chlorophenoxyacetic acid (MCPA)</th>
-<td headers="Heiabekken stub_1_3 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #87BCDC; color: #000000;">0.50 (0.01,1.00)</td>
-<td headers="Heiabekken stub_1_3 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F3F9FE; color: #000000;">28.01 (0.56,55.45)</td></tr>
+<td headers="Heiabekken stub_1_3 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #87BCDC; color: #000000;">0.50 (0.01,1.00)</td>
+<td headers="Heiabekken stub_1_3 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F3F9FE; color: #000000;">28.01 (0.56,55.45)</td></tr>
     <tr><th id="stub_1_4" scope="row" class="gt_row gt_left gt_stub">pencycuron</th>
-<td headers="Heiabekken stub_1_4 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #D9E8F5; color: #000000;">0.18 (0.01,0.35)</td>
-<td headers="Heiabekken stub_1_4 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #B1D2E7; color: #000000;">468.87 (31.60,906.14)</td></tr>
+<td headers="Heiabekken stub_1_4 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #D9E8F5; color: #000000;">0.18 (0.01,0.35)</td>
+<td headers="Heiabekken stub_1_4 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #B1D2E7; color: #000000;">468.87 (31.60,906.14)</td></tr>
     <tr><th id="stub_1_5" scope="row" class="gt_row gt_left gt_stub">metribuzin</th>
-<td headers="Heiabekken stub_1_5 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #DAE8F6; color: #000000;">0.18 (−0.13,0.48)</td>
-<td headers="Heiabekken stub_1_5 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.02 (−1.53,5.58)</td></tr>
+<td headers="Heiabekken stub_1_5 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #DAE8F6; color: #000000;">0.18 (−0.13,0.48)</td>
+<td headers="Heiabekken stub_1_5 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.02 (−1.53,5.58)</td></tr>
     <tr><th id="stub_1_6" scope="row" class="gt_row gt_left gt_stub">fluroxypyr</th>
-<td headers="Heiabekken stub_1_6 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #DDEAF7; color: #000000;">0.16 (—,—)</td>
-<td headers="Heiabekken stub_1_6 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.20 (—,—)</td></tr>
+<td headers="Heiabekken stub_1_6 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #DDEAF7; color: #000000;">0.16 (—,—)</td>
+<td headers="Heiabekken stub_1_6 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.20 (—,—)</td></tr>
     <tr><th id="stub_1_7" scope="row" class="gt_row gt_left gt_stub">mandipropamid</th>
-<td headers="Heiabekken stub_1_7 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #DFECF7; color: #000000;">0.15 (−0.32,0.61)</td>
-<td headers="Heiabekken stub_1_7 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #ECF4FC; color: #000000;">78.77 (−173.61,331.15)</td></tr>
+<td headers="Heiabekken stub_1_7 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #DFECF7; color: #000000;">0.15 (−0.32,0.61)</td>
+<td headers="Heiabekken stub_1_7 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #ECF4FC; color: #000000;">78.77 (−173.61,331.15)</td></tr>
     <tr><th id="stub_1_8" scope="row" class="gt_row gt_left gt_stub">clopyralid</th>
-<td headers="Heiabekken stub_1_8 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #E6F0F9; color: #000000;">0.11 (—,—)</td>
-<td headers="Heiabekken stub_1_8 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">3.63 (—,—)</td></tr>
+<td headers="Heiabekken stub_1_8 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #E6F0F9; color: #000000;">0.11 (—,—)</td>
+<td headers="Heiabekken stub_1_8 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">3.63 (—,—)</td></tr>
     <tr><th id="stub_1_9" scope="row" class="gt_row gt_left gt_stub">boscalid</th>
-<td headers="Heiabekken stub_1_9 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F2F8FD; color: #000000;">0.04 (0.03,0.05)</td>
-<td headers="Heiabekken stub_1_9 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #E6F0F9; color: #000000;">128.91 (92.39,165.44)</td></tr>
+<td headers="Heiabekken stub_1_9 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F2F8FD; color: #000000;">0.04 (0.03,0.05)</td>
+<td headers="Heiabekken stub_1_9 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #E6F0F9; color: #000000;">128.91 (92.39,165.44)</td></tr>
     <tr><th id="stub_1_10" scope="row" class="gt_row gt_left gt_stub">prothioconazole-desthio</th>
-<td headers="Heiabekken stub_1_10 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F3F8FE; color: #000000;">0.04 (0.01,0.06)</td>
-<td headers="Heiabekken stub_1_10 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.42 (0.89,3.95)</td></tr>
+<td headers="Heiabekken stub_1_10 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F3F8FE; color: #000000;">0.04 (0.01,0.06)</td>
+<td headers="Heiabekken stub_1_10 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.42 (0.89,3.95)</td></tr>
     <tr><th id="stub_1_11" scope="row" class="gt_row gt_left gt_stub">metalaxyl</th>
-<td headers="Heiabekken stub_1_11 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F3F8FE; color: #000000;">0.03 (0.02,0.05)</td>
-<td headers="Heiabekken stub_1_11 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.32 (0.19,0.45)</td></tr>
+<td headers="Heiabekken stub_1_11 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F3F8FE; color: #000000;">0.03 (0.02,0.05)</td>
+<td headers="Heiabekken stub_1_11 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.32 (0.19,0.45)</td></tr>
     <tr><th id="stub_1_12" scope="row" class="gt_row gt_left gt_stub">trifloxystrobin</th>
-<td headers="Heiabekken stub_1_12 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F4F9FE; color: #000000;">0.03 (—,—)</td>
-<td headers="Heiabekken stub_1_12 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #ECF4FB; color: #000000;">81.09 (—,—)</td></tr>
+<td headers="Heiabekken stub_1_12 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F4F9FE; color: #000000;">0.03 (—,—)</td>
+<td headers="Heiabekken stub_1_12 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #ECF4FB; color: #000000;">81.09 (—,—)</td></tr>
     <tr><th id="stub_1_13" scope="row" class="gt_row gt_left gt_stub">metamitron</th>
-<td headers="Heiabekken stub_1_13 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (0.01,0.03)</td>
-<td headers="Heiabekken stub_1_13 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.04 (0.03,0.05)</td></tr>
+<td headers="Heiabekken stub_1_13 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (0.01,0.03)</td>
+<td headers="Heiabekken stub_1_13 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.04 (0.03,0.05)</td></tr>
     <tr><th id="stub_1_14" scope="row" class="gt_row gt_left gt_stub">propoxycarbazone</th>
-<td headers="Heiabekken stub_1_14 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F5FAFF; color: #000000;">0.02 (0.01,0.02)</td>
-<td headers="Heiabekken stub_1_14 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.39 (0.29,0.48)</td></tr>
+<td headers="Heiabekken stub_1_14 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F5FAFF; color: #000000;">0.02 (0.01,0.02)</td>
+<td headers="Heiabekken stub_1_14 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.39 (0.29,0.48)</td></tr>
     <tr><th id="stub_1_15" scope="row" class="gt_row gt_left gt_stub">diflufenican</th>
-<td headers="Heiabekken stub_1_15 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">0.02 (0.01,0.03)</td>
-<td headers="Heiabekken stub_1_15 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F2F8FE; color: #000000;">33.95 (12.36,55.54)</td></tr>
+<td headers="Heiabekken stub_1_15 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">0.02 (0.01,0.03)</td>
+<td headers="Heiabekken stub_1_15 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F2F8FE; color: #000000;">33.95 (12.36,55.54)</td></tr>
     <tr><th id="stub_1_16" scope="row" class="gt_row gt_left gt_stub">bixafen</th>
-<td headers="Heiabekken stub_1_16 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">0.02 (0.01,0.03)</td>
-<td headers="Heiabekken stub_1_16 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F2F8FD; color: #000000;">37.36 (14.70,60.03)</td></tr>
+<td headers="Heiabekken stub_1_16 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">0.02 (0.01,0.03)</td>
+<td headers="Heiabekken stub_1_16 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F2F8FD; color: #000000;">37.36 (14.70,60.03)</td></tr>
     <tr><th id="stub_1_17" scope="row" class="gt_row gt_left gt_stub">2,6-dichlorobenzamide (BAM)</th>
-<td headers="Heiabekken stub_1_17 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">0.02 (—,—)</td>
-<td headers="Heiabekken stub_1_17 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.04 (—,—)</td></tr>
+<td headers="Heiabekken stub_1_17 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">0.02 (—,—)</td>
+<td headers="Heiabekken stub_1_17 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.04 (—,—)</td></tr>
     <tr><th id="stub_1_18" scope="row" class="gt_row gt_left gt_stub">pyraclostrobin</th>
-<td headers="Heiabekken stub_1_18 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">0.02 (−0.04,0.07)</td>
-<td headers="Heiabekken stub_1_18 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">11.92 (−32.06,55.90)</td></tr>
+<td headers="Heiabekken stub_1_18 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">0.02 (−0.04,0.07)</td>
+<td headers="Heiabekken stub_1_18 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">11.92 (−32.06,55.90)</td></tr>
     <tr><th id="stub_1_19" scope="row" class="gt_row gt_left gt_stub">spinosad</th>
-<td headers="Heiabekken stub_1_19 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.01 (—,—)</td>
-<td headers="Heiabekken stub_1_19 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #808080; color: #FFFFFF;">— (—,—)</td></tr>
+<td headers="Heiabekken stub_1_19 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.01 (—,—)</td>
+<td headers="Heiabekken stub_1_19 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #808080; color: #FFFFFF;">— (—,—)</td></tr>
     <tr><th id="stub_1_20" scope="row" class="gt_row gt_left gt_stub">1,1'-(2,2-Dichloro-1,1-ethenediyl)bis(4-chlorobenzene)</th>
-<td headers="Heiabekken stub_1_20 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.01 (—,—)</td>
-<td headers="Heiabekken stub_1_20 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #08306B; color: #FFFFFF;">1,476.32 (—,—)</td></tr>
+<td headers="Heiabekken stub_1_20 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.01 (—,—)</td>
+<td headers="Heiabekken stub_1_20 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #08306B; color: #FFFFFF;">1,476.32 (—,—)</td></tr>
     <tr class="gt_group_heading_row">
       <th colspan="3" class="gt_group_heading" scope="colgroup" id="Skuterudbekken">Skuterudbekken</th>
     </tr>
     <tr class="gt_row_group_first"><th id="stub_1_21" scope="row" class="gt_row gt_left gt_stub">2-methyl-4-chlorophenoxyacetic acid (MCPA)</th>
-<td headers="Skuterudbekken stub_1_21 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #A1CBE2; color: #000000;">0.43 (−0.13,0.99)</td>
-<td headers="Skuterudbekken stub_1_21 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F4F9FE; color: #000000;">23.70 (−7.50,54.89)</td></tr>
+<td headers="Skuterudbekken stub_1_21 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #A1CBE2; color: #000000;">0.43 (−0.13,0.99)</td>
+<td headers="Skuterudbekken stub_1_21 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F4F9FE; color: #000000;">23.70 (−7.50,54.89)</td></tr>
     <tr><th id="stub_1_22" scope="row" class="gt_row gt_left gt_stub">fluroxypyr</th>
-<td headers="Skuterudbekken stub_1_22 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #CCDFF1; color: #000000;">0.26 (0.00,0.51)</td>
-<td headers="Skuterudbekken stub_1_22 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">3.55 (0.02,7.07)</td></tr>
+<td headers="Skuterudbekken stub_1_22 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #CCDFF1; color: #000000;">0.26 (0.00,0.51)</td>
+<td headers="Skuterudbekken stub_1_22 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">3.55 (0.02,7.07)</td></tr>
     <tr><th id="stub_1_23" scope="row" class="gt_row gt_left gt_stub">clopyralid</th>
-<td headers="Skuterudbekken stub_1_23 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #E1EDF8; color: #000000;">0.13 (0.01,0.26)</td>
-<td headers="Skuterudbekken stub_1_23 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F6FBFF; color: #000000;">4.42 (0.32,8.51)</td></tr>
+<td headers="Skuterudbekken stub_1_23 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #E1EDF8; color: #000000;">0.13 (0.01,0.26)</td>
+<td headers="Skuterudbekken stub_1_23 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F6FBFF; color: #000000;">4.42 (0.32,8.51)</td></tr>
     <tr><th id="stub_1_24" scope="row" class="gt_row gt_left gt_stub">prothioconazole-desthio</th>
-<td headers="Skuterudbekken stub_1_24 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F1F7FD; color: #000000;">0.05 (−0.03,0.12)</td>
-<td headers="Skuterudbekken stub_1_24 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">3.12 (−1.66,7.90)</td></tr>
+<td headers="Skuterudbekken stub_1_24 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F1F7FD; color: #000000;">0.05 (−0.03,0.12)</td>
+<td headers="Skuterudbekken stub_1_24 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">3.12 (−1.66,7.90)</td></tr>
     <tr><th id="stub_1_25" scope="row" class="gt_row gt_left gt_stub">dichlorprop</th>
-<td headers="Skuterudbekken stub_1_25 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F3F8FE; color: #000000;">0.04 (—,—)</td>
-<td headers="Skuterudbekken stub_1_25 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">7.91 (—,—)</td></tr>
+<td headers="Skuterudbekken stub_1_25 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F3F8FE; color: #000000;">0.04 (—,—)</td>
+<td headers="Skuterudbekken stub_1_25 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">7.91 (—,—)</td></tr>
     <tr><th id="stub_1_26" scope="row" class="gt_row gt_left gt_stub">imidacloprid</th>
-<td headers="Skuterudbekken stub_1_26 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (—,—)</td>
-<td headers="Skuterudbekken stub_1_26 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.05 (—,—)</td></tr>
+<td headers="Skuterudbekken stub_1_26 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (—,—)</td>
+<td headers="Skuterudbekken stub_1_26 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.05 (—,—)</td></tr>
     <tr><th id="stub_1_27" scope="row" class="gt_row gt_left gt_stub">bixafen</th>
-<td headers="Skuterudbekken stub_1_27 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (0.00,0.04)</td>
-<td headers="Skuterudbekken stub_1_27 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F1F7FD; color: #000000;">45.42 (7.07,83.77)</td></tr>
+<td headers="Skuterudbekken stub_1_27 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (0.00,0.04)</td>
+<td headers="Skuterudbekken stub_1_27 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F1F7FD; color: #000000;">45.42 (7.07,83.77)</td></tr>
     <tr><th id="stub_1_28" scope="row" class="gt_row gt_left gt_stub">propiconazole</th>
-<td headers="Skuterudbekken stub_1_28 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (−0.02,0.06)</td>
-<td headers="Skuterudbekken stub_1_28 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F6FBFF; color: #000000;">5.52 (−6.45,17.49)</td></tr>
+<td headers="Skuterudbekken stub_1_28 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (−0.02,0.06)</td>
+<td headers="Skuterudbekken stub_1_28 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F6FBFF; color: #000000;">5.52 (−6.45,17.49)</td></tr>
     <tr><th id="stub_1_29" scope="row" class="gt_row gt_left gt_stub">boscalid</th>
-<td headers="Skuterudbekken stub_1_29 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">0.02 (0.01,0.02)</td>
-<td headers="Skuterudbekken stub_1_29 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F0F7FD; color: #000000;">49.90 (29.40,70.40)</td></tr>
+<td headers="Skuterudbekken stub_1_29 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">0.02 (0.01,0.02)</td>
+<td headers="Skuterudbekken stub_1_29 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F0F7FD; color: #000000;">49.90 (29.40,70.40)</td></tr>
     <tr><th id="stub_1_30" scope="row" class="gt_row gt_left gt_stub">pyroxsulam</th>
-<td headers="Skuterudbekken stub_1_30 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F6FBFF; color: #000000;">0.01 (−0.02,0.05)</td>
-<td headers="Skuterudbekken stub_1_30 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.16 (−0.28,0.60)</td></tr>
+<td headers="Skuterudbekken stub_1_30 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F6FBFF; color: #000000;">0.01 (−0.02,0.05)</td>
+<td headers="Skuterudbekken stub_1_30 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.16 (−0.28,0.60)</td></tr>
     <tr><th id="stub_1_31" scope="row" class="gt_row gt_left gt_stub">mecoprop</th>
-<td headers="Skuterudbekken stub_1_31 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.01 (—,—)</td>
-<td headers="Skuterudbekken stub_1_31 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">1.74 (—,—)</td></tr>
+<td headers="Skuterudbekken stub_1_31 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.01 (—,—)</td>
+<td headers="Skuterudbekken stub_1_31 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">1.74 (—,—)</td></tr>
     <tr><th id="stub_1_32" scope="row" class="gt_row gt_left gt_stub">carbendazim</th>
-<td headers="Skuterudbekken stub_1_32 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.01 (—,—)</td>
-<td headers="Skuterudbekken stub_1_32 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.11 (—,—)</td></tr>
+<td headers="Skuterudbekken stub_1_32 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.01 (—,—)</td>
+<td headers="Skuterudbekken stub_1_32 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.11 (—,—)</td></tr>
     <tr class="gt_group_heading_row">
       <th colspan="3" class="gt_group_heading" scope="colgroup" id="Mørdrebekken">Mørdrebekken</th>
     </tr>
     <tr class="gt_row_group_first"><th id="stub_1_33" scope="row" class="gt_row gt_left gt_stub">2-methyl-4-chlorophenoxyacetic acid (MCPA)</th>
-<td headers="Mørdrebekken stub_1_33 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #BBD6EB; color: #000000;">0.33 (−0.35,1.01)</td>
-<td headers="Mørdrebekken stub_1_33 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F5F9FE; color: #000000;">18.48 (−19.28,56.24)</td></tr>
+<td headers="Mørdrebekken stub_1_33 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #BBD6EB; color: #000000;">0.33 (−0.35,1.01)</td>
+<td headers="Mørdrebekken stub_1_33 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F5F9FE; color: #000000;">18.48 (−19.28,56.24)</td></tr>
     <tr><th id="stub_1_34" scope="row" class="gt_row gt_left gt_stub">fluroxypyr</th>
-<td headers="Mørdrebekken stub_1_34 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #CDE0F1; color: #000000;">0.25 (−1.53,2.03)</td>
-<td headers="Mørdrebekken stub_1_34 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">3.44 (−21.01,27.88)</td></tr>
+<td headers="Mørdrebekken stub_1_34 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #CDE0F1; color: #000000;">0.25 (−1.53,2.03)</td>
+<td headers="Mørdrebekken stub_1_34 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">3.44 (−21.01,27.88)</td></tr>
     <tr><th id="stub_1_35" scope="row" class="gt_row gt_left gt_stub">bentazone</th>
-<td headers="Mørdrebekken stub_1_35 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #D5E5F4; color: #000000;">0.21 (−0.11,0.53)</td>
-<td headers="Mørdrebekken stub_1_35 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">16.25 (−9.02,41.51)</td></tr>
+<td headers="Mørdrebekken stub_1_35 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #D5E5F4; color: #000000;">0.21 (−0.11,0.53)</td>
+<td headers="Mørdrebekken stub_1_35 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">16.25 (−9.02,41.51)</td></tr>
     <tr><th id="stub_1_36" scope="row" class="gt_row gt_left gt_stub">clopyralid</th>
-<td headers="Mørdrebekken stub_1_36 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #D6E6F4; color: #000000;">0.20 (—,—)</td>
-<td headers="Mørdrebekken stub_1_36 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">6.59 (—,—)</td></tr>
+<td headers="Mørdrebekken stub_1_36 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #D6E6F4; color: #000000;">0.20 (—,—)</td>
+<td headers="Mørdrebekken stub_1_36 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">6.59 (—,—)</td></tr>
     <tr><th id="stub_1_37" scope="row" class="gt_row gt_left gt_stub">propiconazole</th>
-<td headers="Mørdrebekken stub_1_37 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #DCEAF6; color: #000000;">0.16 (−0.28,0.61)</td>
-<td headers="Mørdrebekken stub_1_37 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F1F7FD; color: #000000;">43.87 (−75.26,163.01)</td></tr>
+<td headers="Mørdrebekken stub_1_37 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #DCEAF6; color: #000000;">0.16 (−0.28,0.61)</td>
+<td headers="Mørdrebekken stub_1_37 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F1F7FD; color: #000000;">43.87 (−75.26,163.01)</td></tr>
     <tr><th id="stub_1_38" scope="row" class="gt_row gt_left gt_stub">pencycuron</th>
-<td headers="Mørdrebekken stub_1_38 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #EDF4FC; color: #000000;">0.07 (−0.31,0.45)</td>
-<td headers="Mørdrebekken stub_1_38 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #DEEBF7; color: #000000;">183.27 (−814.74,1,181.29)</td></tr>
+<td headers="Mørdrebekken stub_1_38 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #EDF4FC; color: #000000;">0.07 (−0.31,0.45)</td>
+<td headers="Mørdrebekken stub_1_38 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #DEEBF7; color: #000000;">183.27 (−814.74,1,181.29)</td></tr>
     <tr><th id="stub_1_39" scope="row" class="gt_row gt_left gt_stub">fenpropimorph</th>
-<td headers="Mørdrebekken stub_1_39 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F0F6FD; color: #000000;">0.05 (—,—)</td>
-<td headers="Mørdrebekken stub_1_39 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #D2E3F3; color: #000000;">274.16 (—,—)</td></tr>
+<td headers="Mørdrebekken stub_1_39 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F0F6FD; color: #000000;">0.05 (—,—)</td>
+<td headers="Mørdrebekken stub_1_39 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #D2E3F3; color: #000000;">274.16 (—,—)</td></tr>
     <tr><th id="stub_1_40" scope="row" class="gt_row gt_left gt_stub">thiabendazole</th>
-<td headers="Mørdrebekken stub_1_40 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F2F8FD; color: #000000;">0.04 (—,—)</td>
-<td headers="Mørdrebekken stub_1_40 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">1.92 (—,—)</td></tr>
+<td headers="Mørdrebekken stub_1_40 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F2F8FD; color: #000000;">0.04 (—,—)</td>
+<td headers="Mørdrebekken stub_1_40 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">1.92 (—,—)</td></tr>
     <tr><th id="stub_1_41" scope="row" class="gt_row gt_left gt_stub">prothioconazole-desthio</th>
-<td headers="Mørdrebekken stub_1_41 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F3F9FE; color: #000000;">0.03 (−0.03,0.09)</td>
-<td headers="Mørdrebekken stub_1_41 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.17 (−1.93,6.28)</td></tr>
+<td headers="Mørdrebekken stub_1_41 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F3F9FE; color: #000000;">0.03 (−0.03,0.09)</td>
+<td headers="Mørdrebekken stub_1_41 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.17 (−1.93,6.28)</td></tr>
     <tr><th id="stub_1_42" scope="row" class="gt_row gt_left gt_stub">pinoxaden</th>
-<td headers="Mørdrebekken stub_1_42 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F3F9FE; color: #000000;">0.03 (—,—)</td>
-<td headers="Mørdrebekken stub_1_42 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #EFF6FD; color: #000000;">57.20 (—,—)</td></tr>
+<td headers="Mørdrebekken stub_1_42 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F3F9FE; color: #000000;">0.03 (—,—)</td>
+<td headers="Mørdrebekken stub_1_42 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #EFF6FD; color: #000000;">57.20 (—,—)</td></tr>
     <tr><th id="stub_1_43" scope="row" class="gt_row gt_left gt_stub">azoxystrobin</th>
-<td headers="Mørdrebekken stub_1_43 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (0.01,0.03)</td>
-<td headers="Mørdrebekken stub_1_43 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">8.21 (4.05,12.38)</td></tr>
+<td headers="Mørdrebekken stub_1_43 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (0.01,0.03)</td>
+<td headers="Mørdrebekken stub_1_43 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">8.21 (4.05,12.38)</td></tr>
     <tr><th id="stub_1_44" scope="row" class="gt_row gt_left gt_stub">bixafen</th>
-<td headers="Mørdrebekken stub_1_44 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F6FBFF; color: #000000;">0.01 (—,—)</td>
-<td headers="Mørdrebekken stub_1_44 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F3F8FE; color: #000000;">32.97 (—,—)</td></tr>
+<td headers="Mørdrebekken stub_1_44 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F6FBFF; color: #000000;">0.01 (—,—)</td>
+<td headers="Mørdrebekken stub_1_44 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F3F8FE; color: #000000;">32.97 (—,—)</td></tr>
     <tr class="gt_group_heading_row">
       <th colspan="3" class="gt_group_heading" scope="colgroup" id="Timebekken">Timebekken</th>
     </tr>
     <tr class="gt_row_group_first"><th id="stub_1_45" scope="row" class="gt_row gt_left gt_stub">metribuzin</th>
-<td headers="Timebekken stub_1_45 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #C4DAEE; color: #000000;">0.30 (−3.36,3.96)</td>
-<td headers="Timebekken stub_1_45 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">3.48 (−38.73,45.69)</td></tr>
+<td headers="Timebekken stub_1_45 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #C4DAEE; color: #000000;">0.30 (−3.36,3.96)</td>
+<td headers="Timebekken stub_1_45 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">3.48 (−38.73,45.69)</td></tr>
     <tr><th id="stub_1_46" scope="row" class="gt_row gt_left gt_stub">fluroxypyr</th>
-<td headers="Timebekken stub_1_46 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #C9DDF0; color: #000000;">0.28 (0.04,0.51)</td>
-<td headers="Timebekken stub_1_46 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F6FBFF; color: #000000;">3.78 (0.53,7.02)</td></tr>
+<td headers="Timebekken stub_1_46 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #C9DDF0; color: #000000;">0.28 (0.04,0.51)</td>
+<td headers="Timebekken stub_1_46 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F6FBFF; color: #000000;">3.78 (0.53,7.02)</td></tr>
     <tr><th id="stub_1_47" scope="row" class="gt_row gt_left gt_stub">florasulam</th>
-<td headers="Timebekken stub_1_47 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (—,—)</td>
-<td headers="Timebekken stub_1_47 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.22 (—,—)</td></tr>
+<td headers="Timebekken stub_1_47 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (—,—)</td>
+<td headers="Timebekken stub_1_47 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.22 (—,—)</td></tr>
     <tr><th id="stub_1_48" scope="row" class="gt_row gt_left gt_stub">propiconazole</th>
-<td headers="Timebekken stub_1_48 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">0.02 (—,—)</td>
-<td headers="Timebekken stub_1_48 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F6FBFF; color: #000000;">4.31 (—,—)</td></tr>
+<td headers="Timebekken stub_1_48 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">0.02 (—,—)</td>
+<td headers="Timebekken stub_1_48 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F6FBFF; color: #000000;">4.31 (—,—)</td></tr>
     <tr><th id="stub_1_49" scope="row" class="gt_row gt_left gt_stub">2-methyl-4-chlorophenoxyacetic acid (MCPA)</th>
-<td headers="Timebekken stub_1_49 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.01 (—,—)</td>
-<td headers="Timebekken stub_1_49 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.61 (—,—)</td></tr>
+<td headers="Timebekken stub_1_49 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.01 (—,—)</td>
+<td headers="Timebekken stub_1_49 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.61 (—,—)</td></tr>
     <tr class="gt_group_heading_row">
       <th colspan="3" class="gt_group_heading" scope="colgroup" id="Vasshaglona">Vasshaglona</th>
     </tr>
     <tr class="gt_row_group_first"><th id="stub_1_50" scope="row" class="gt_row gt_left gt_stub">fenamidone</th>
-<td headers="Vasshaglona stub_1_50 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #D4E5F4; color: #000000;">0.21 (−1.72,2.13)</td>
-<td headers="Vasshaglona stub_1_50 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #E1EDF8; color: #000000;">160.36 (−1,320.20,1,640.93)</td></tr>
+<td headers="Vasshaglona stub_1_50 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #D4E5F4; color: #000000;">0.21 (−1.72,2.13)</td>
+<td headers="Vasshaglona stub_1_50 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #E1EDF8; color: #000000;">160.36 (−1,320.20,1,640.93)</td></tr>
     <tr><th id="stub_1_51" scope="row" class="gt_row gt_left gt_stub">propamocarb</th>
-<td headers="Vasshaglona stub_1_51 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #E7F1FA; color: #000000;">0.10 (−0.09,0.29)</td>
-<td headers="Vasshaglona stub_1_51 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.49 (−0.43,1.41)</td></tr>
+<td headers="Vasshaglona stub_1_51 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #E7F1FA; color: #000000;">0.10 (−0.09,0.29)</td>
+<td headers="Vasshaglona stub_1_51 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.49 (−0.43,1.41)</td></tr>
     <tr><th id="stub_1_52" scope="row" class="gt_row gt_left gt_stub">pyridafol</th>
-<td headers="Vasshaglona stub_1_52 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #EAF3FB; color: #000000;">0.08 (−0.04,0.21)</td>
-<td headers="Vasshaglona stub_1_52 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">3.28 (−1.62,8.18)</td></tr>
+<td headers="Vasshaglona stub_1_52 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #EAF3FB; color: #000000;">0.08 (−0.04,0.21)</td>
+<td headers="Vasshaglona stub_1_52 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">3.28 (−1.62,8.18)</td></tr>
     <tr><th id="stub_1_53" scope="row" class="gt_row gt_left gt_stub">metribuzin</th>
-<td headers="Vasshaglona stub_1_53 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #EBF3FB; color: #000000;">0.08 (0.02,0.14)</td>
-<td headers="Vasshaglona stub_1_53 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.91 (0.25,1.56)</td></tr>
+<td headers="Vasshaglona stub_1_53 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #EBF3FB; color: #000000;">0.08 (0.02,0.14)</td>
+<td headers="Vasshaglona stub_1_53 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.91 (0.25,1.56)</td></tr>
     <tr><th id="stub_1_54" scope="row" class="gt_row gt_left gt_stub">thiacloprid</th>
-<td headers="Vasshaglona stub_1_54 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #EDF4FC; color: #000000;">0.07 (−0.57,0.71)</td>
-<td headers="Vasshaglona stub_1_54 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">1.92 (−15.83,19.68)</td></tr>
+<td headers="Vasshaglona stub_1_54 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #EDF4FC; color: #000000;">0.07 (−0.57,0.71)</td>
+<td headers="Vasshaglona stub_1_54 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">1.92 (−15.83,19.68)</td></tr>
     <tr><th id="stub_1_55" scope="row" class="gt_row gt_left gt_stub">fluroxypyr</th>
-<td headers="Vasshaglona stub_1_55 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #EDF5FC; color: #000000;">0.07 (0.03,0.11)</td>
-<td headers="Vasshaglona stub_1_55 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.92 (0.34,1.49)</td></tr>
+<td headers="Vasshaglona stub_1_55 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #EDF5FC; color: #000000;">0.07 (0.03,0.11)</td>
+<td headers="Vasshaglona stub_1_55 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.92 (0.34,1.49)</td></tr>
     <tr><th id="stub_1_56" scope="row" class="gt_row gt_left gt_stub">cyazofamid</th>
-<td headers="Vasshaglona stub_1_56 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F0F6FD; color: #000000;">0.05 (—,—)</td>
-<td headers="Vasshaglona stub_1_56 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.90 (—,—)</td></tr>
+<td headers="Vasshaglona stub_1_56 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F0F6FD; color: #000000;">0.05 (—,—)</td>
+<td headers="Vasshaglona stub_1_56 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.90 (—,—)</td></tr>
     <tr><th id="stub_1_57" scope="row" class="gt_row gt_left gt_stub">2-methyl-4-chlorophenoxyacetic acid (MCPA)</th>
-<td headers="Vasshaglona stub_1_57 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F0F7FD; color: #000000;">0.05 (−0.07,0.17)</td>
-<td headers="Vasshaglona stub_1_57 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.79 (−3.72,9.29)</td></tr>
+<td headers="Vasshaglona stub_1_57 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F0F7FD; color: #000000;">0.05 (−0.07,0.17)</td>
+<td headers="Vasshaglona stub_1_57 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.79 (−3.72,9.29)</td></tr>
     <tr><th id="stub_1_58" scope="row" class="gt_row gt_left gt_stub">aclonifen</th>
-<td headers="Vasshaglona stub_1_58 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F0F7FD; color: #000000;">0.05 (−0.04,0.14)</td>
-<td headers="Vasshaglona stub_1_58 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F4F9FE; color: #000000;">22.41 (−16.99,61.80)</td></tr>
+<td headers="Vasshaglona stub_1_58 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F0F7FD; color: #000000;">0.05 (−0.04,0.14)</td>
+<td headers="Vasshaglona stub_1_58 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F4F9FE; color: #000000;">22.41 (−16.99,61.80)</td></tr>
     <tr><th id="stub_1_59" scope="row" class="gt_row gt_left gt_stub">boscalid</th>
-<td headers="Vasshaglona stub_1_59 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F0F7FD; color: #000000;">0.05 (0.02,0.08)</td>
-<td headers="Vasshaglona stub_1_59 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #E3EEF8; color: #000000;">150.75 (64.62,236.87)</td></tr>
+<td headers="Vasshaglona stub_1_59 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F0F7FD; color: #000000;">0.05 (0.02,0.08)</td>
+<td headers="Vasshaglona stub_1_59 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #E3EEF8; color: #000000;">150.75 (64.62,236.87)</td></tr>
     <tr><th id="stub_1_60" scope="row" class="gt_row gt_left gt_stub">pencycuron</th>
-<td headers="Vasshaglona stub_1_60 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F1F7FD; color: #000000;">0.05 (−0.01,0.10)</td>
-<td headers="Vasshaglona stub_1_60 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #E7F1FA; color: #000000;">118.94 (−15.84,253.72)</td></tr>
+<td headers="Vasshaglona stub_1_60 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F1F7FD; color: #000000;">0.05 (−0.01,0.10)</td>
+<td headers="Vasshaglona stub_1_60 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #E7F1FA; color: #000000;">118.94 (−15.84,253.72)</td></tr>
     <tr><th id="stub_1_61" scope="row" class="gt_row gt_left gt_stub">mandipropamid</th>
-<td headers="Vasshaglona stub_1_61 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F1F7FD; color: #000000;">0.04 (0.00,0.09)</td>
-<td headers="Vasshaglona stub_1_61 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F4F9FE; color: #000000;">23.49 (−1.85,48.83)</td></tr>
+<td headers="Vasshaglona stub_1_61 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F1F7FD; color: #000000;">0.04 (0.00,0.09)</td>
+<td headers="Vasshaglona stub_1_61 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F4F9FE; color: #000000;">23.49 (−1.85,48.83)</td></tr>
     <tr><th id="stub_1_62" scope="row" class="gt_row gt_left gt_stub">spinosad</th>
-<td headers="Vasshaglona stub_1_62 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F3F8FE; color: #000000;">0.03 (—,—)</td>
-<td headers="Vasshaglona stub_1_62 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #808080; color: #FFFFFF;">— (—,—)</td></tr>
+<td headers="Vasshaglona stub_1_62 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F3F8FE; color: #000000;">0.03 (—,—)</td>
+<td headers="Vasshaglona stub_1_62 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #808080; color: #FFFFFF;">— (—,—)</td></tr>
     <tr><th id="stub_1_63" scope="row" class="gt_row gt_left gt_stub">cyprodinil</th>
-<td headers="Vasshaglona stub_1_63 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F3F8FE; color: #000000;">0.03 (−0.05,0.11)</td>
-<td headers="Vasshaglona stub_1_63 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F6FBFF; color: #000000;">4.46 (−6.41,15.32)</td></tr>
+<td headers="Vasshaglona stub_1_63 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F3F8FE; color: #000000;">0.03 (−0.05,0.11)</td>
+<td headers="Vasshaglona stub_1_63 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F6FBFF; color: #000000;">4.46 (−6.41,15.32)</td></tr>
     <tr><th id="stub_1_64" scope="row" class="gt_row gt_left gt_stub">clomazone</th>
-<td headers="Vasshaglona stub_1_64 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F3F9FE; color: #000000;">0.03 (−0.04,0.10)</td>
-<td headers="Vasshaglona stub_1_64 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">1.50 (−1.65,4.64)</td></tr>
+<td headers="Vasshaglona stub_1_64 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F3F9FE; color: #000000;">0.03 (−0.04,0.10)</td>
+<td headers="Vasshaglona stub_1_64 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">1.50 (−1.65,4.64)</td></tr>
     <tr><th id="stub_1_65" scope="row" class="gt_row gt_left gt_stub">bentazone</th>
-<td headers="Vasshaglona stub_1_65 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F4F9FE; color: #000000;">0.03 (0.02,0.03)</td>
-<td headers="Vasshaglona stub_1_65 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.06 (1.48,2.65)</td></tr>
+<td headers="Vasshaglona stub_1_65 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F4F9FE; color: #000000;">0.03 (0.02,0.03)</td>
+<td headers="Vasshaglona stub_1_65 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.06 (1.48,2.65)</td></tr>
     <tr><th id="stub_1_66" scope="row" class="gt_row gt_left gt_stub">fludioxonil</th>
-<td headers="Vasshaglona stub_1_66 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (−0.01,0.06)</td>
-<td headers="Vasshaglona stub_1_66 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">1.17 (−0.75,3.09)</td></tr>
+<td headers="Vasshaglona stub_1_66 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (−0.01,0.06)</td>
+<td headers="Vasshaglona stub_1_66 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">1.17 (−0.75,3.09)</td></tr>
     <tr><th id="stub_1_67" scope="row" class="gt_row gt_left gt_stub">imidacloprid</th>
-<td headers="Vasshaglona stub_1_67 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (0.00,0.04)</td>
-<td headers="Vasshaglona stub_1_67 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.05 (0.01,0.08)</td></tr>
+<td headers="Vasshaglona stub_1_67 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F5FAFE; color: #000000;">0.02 (0.00,0.04)</td>
+<td headers="Vasshaglona stub_1_67 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">0.05 (0.01,0.08)</td></tr>
     <tr><th id="stub_1_68" scope="row" class="gt_row gt_left gt_stub">chlorfenvinphos</th>
-<td headers="Vasshaglona stub_1_68 MEASURED_VALUE_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">0.02 (—,—)</td>
-<td headers="Vasshaglona stub_1_68 FishConcentration_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.27 (—,—)</td></tr>
+<td headers="Vasshaglona stub_1_68 Water concentration (ug/L)_Mean" class="gt_row gt_right" style="background-color: #F6FAFF; color: #000000;">0.02 (—,—)</td>
+<td headers="Vasshaglona stub_1_68 Fish concentration (ug/Kg)_Mean" class="gt_row gt_right" style="background-color: #F7FBFF; color: #000000;">2.27 (—,—)</td></tr>
   </tbody>
   
   
@@ -2283,8 +2300,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"#f0f0f0"</span>)</span>
 <span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
 <span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
-<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">"log(Water concentration)"</span>,</span>
-<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"log(Fish concentration)"</span></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">"log(Water concentration (ug/L))"</span>,</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"log(Fish concentration (ug/Kg))"</span></span>
 <span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -2357,8 +2374,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette =</span> <span class="st">"Set1"</span>, </span>
 <span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>,</span>
 <span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(</span>
-<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>      <span class="at">FishConc =</span> <span class="st">"Fish concentration"</span>,</span>
-<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>      <span class="at">WaterConc =</span> <span class="st">"Water concentration"</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>      <span class="at">FishConc =</span> <span class="st">"Fish concentration (ug/Kg)"</span>,</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>      <span class="at">WaterConc =</span> <span class="st">"Water concentration (ug/L)"</span></span>
 <span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
 <span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>

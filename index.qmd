@@ -2,7 +2,9 @@
 title: "Spatio-Temporal Exposure Analysis"
 author: "Raju Rimal"
 date: "`r Sys.Date()`"
-format: html
+format: 
+  html: default
+  gfm: default
 code-fold: true
 editor_options: 
   chunk_output_type: console
@@ -218,7 +220,11 @@ make_lines <- function(data, x_var, x_lab) {
     ) +
     labs(
       x = x_lab,
-      y = NULL
+      y = paste(
+        "Water concentration (ug/L) of",
+        plot_data[, first(STRESSOR_NAME)],
+        sep = "\n"
+      )
     )
 }
 
@@ -328,7 +334,7 @@ patchwork::wrap_plots(by_month, by_wday, nrow = 2) +
 
 ```{r}
 #| label: Summary Table
-#| code-summary: Summary table
+#| code-summary: Water concentration (ug/L) summary of stressor
 #| 
 summary_table <- exposure_data %>% 
   group_by(SITE_NAME, STRESSOR_NAME) %>% 
@@ -391,7 +397,16 @@ summary_comparison <- exposure_data %>%
       }
     )
   ) %>% unnest(names_sep = "_") %>% 
-  arrange(desc(MEASURED_VALUE_Mean), desc(FishConcentration_Mean))
+  tidytable::rename_with(
+    ~gsub("MEASURED_VALUE", "Water concentration (ug/L)", .x)
+  ) %>% 
+  tidytable::rename_with(
+    ~gsub("FishConcentration", "Fish concentration (ug/Kg)", .x)
+  ) %>% 
+  arrange(
+    desc(`Water concentration (ug/L)_Mean`), 
+    desc(`Fish concentration (ug/Kg)_Mean`)
+  )
 
 gt::gt(
   data = summary_comparison, 
@@ -401,11 +416,11 @@ gt::gt(
   gt::fmt_number() %>% 
   gt::sub_missing() %>% 
   gt::cols_merge(
-    columns = gt::starts_with("MEASURED_VALUE") & !gt::ends_with("Mean"),
+    columns = gt::starts_with("Water") & !gt::ends_with("Mean"),
     pattern = "({1},{2})"
   ) %>% 
   gt::cols_merge(
-    columns = gt::starts_with("FishConcentration") & !gt::ends_with("Mean"),
+    columns = gt::starts_with("Fish") & !gt::ends_with("Mean"),
     pattern = "({1},{2})"
   ) %>% 
   gt::cols_merge(
@@ -420,6 +435,10 @@ gt::gt(
     fn = \(x) gsub("Mean", "Mean (95% CI)", x)
   ) %>% 
   gt::opt_vertical_padding(0.25) %>%
+  gt::tab_style(
+    style = gt::cell_text(align = "center"),
+    locations = gt::cells_column_labels()
+  ) %>% 
   gt::tab_options(
     table.width = "100%",
     table.font.size = "10pt",
@@ -483,8 +502,8 @@ make_two_fitted_plot <- function(data, time_var) {
       panel.grid = element_line(color = "#f0f0f0")
     ) +
     labs(
-      x = "log(Water concentration)",
-      y = "log(Fish concentration)"
+      x = "log(Water concentration (ug/L))",
+      y = "log(Fish concentration (ug/Kg))"
     )
 }
 
@@ -563,8 +582,8 @@ csmaps::nor_municip_map_b2020_split_dt %>%
     palette = "Set1", 
     direction = -1,
     labels = c(
-      FishConc = "Fish concentration",
-      WaterConc = "Water concentration"
+      FishConc = "Fish concentration (ug/Kg)",
+      WaterConc = "Water concentration (ug/L)"
     )
   ) +
   theme_void() +
