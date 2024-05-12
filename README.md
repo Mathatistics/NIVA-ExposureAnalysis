@@ -169,3 +169,17 @@ Compound ID were fetched using the command `webchem::get_cid` using the
 A [shiny app](https://therimalaya.shinyapps.io/NIVA-AppExposure/) can
 help to explore the data further. To run the shiny app from the local
 computer,
+
+<details>
+<summary>Code</summary>
+
+``` r
+shiny::runGitHub(
+  username = "Mathatistics", 
+  repo = "NIVA-ExposureAnalysis", 
+  subdir = "ShinyApp/",
+  ref = "main"
+)
+```
+
+</details>
